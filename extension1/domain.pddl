@@ -38,11 +38,11 @@
         :parameters (?habitacion - habitacion ?reserva - reserva ?reserva1 - reserva)
         :precondition (and 
             (not (visitada ?reserva))
+            (reservada ?reserva1)
+            ;(not (= ?reserva ?reserva1)) -- absurd perk no pot ser reservat + no visitat
             (>= (tamano_habitacion ?habitacion) (tamano_reserva ?reserva))
+            (>= (tamano_habitacion ?habitacion) (tamano_reserva ?reserva1))
             (or
-                (= ?reserva ?reserva1)
-                (not (reservada ?reserva1))
-                (< (tamano_habitacion ?habitacion) (tamano_reserva ?reserva1))
                 (and
                     (>= (end_day ?reserva1) (start_day ?reserva))
                     (<= (end_day ?reserva1) (end_day ?reserva))
@@ -57,6 +57,6 @@
                 )
             )
         )
-        :effect (not (reservada ?reserva))
+        :effect (not (reservada ?reserva1))
     )
 )
