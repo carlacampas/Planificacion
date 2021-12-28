@@ -1,4 +1,4 @@
-(define (domain nom-domain)
+(define (domain hotel)
     (:requirements :strips :equality :adl :typing)
     (:types habitacion - item
             dia - item
