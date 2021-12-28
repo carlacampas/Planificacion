@@ -10,7 +10,6 @@
     )
     (:predicates
         (visitada ?reserva - reserva)
-        (equalReservas ?reserva - reserva ?reserva1 - reserva)
     )
     (:action reservar
         :parameters (?habitacion - habitacion ?reserva - reserva)
