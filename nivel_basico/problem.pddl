@@ -6,7 +6,7 @@
     )
     (:init
         (= (start_day r1) 1)
-        ;(= (start_day r2) 2)
+        (= (start_day r2) 2)
         (= (start_day r3) 3)
         (= (start_day r4) 4)
         (= (start_day r5) 5)
@@ -24,8 +24,8 @@
         (= (start_day r82) 8)
         (= (start_day r92) 9)
 
-        (= (end_day r1) 2)
-        ;(= (end_day r2) 2)
+        (= (end_day r1) 1)
+        (= (end_day r2) 2)
         (= (end_day r3) 3)
         (= (end_day r4) 4)
         (= (end_day r5) 5)

@@ -20,16 +20,8 @@
                 (or
                     (visitada ?reserva1)
                     (< (tamano_habitacion ?habitacion) (tamano_reserva ?reserva1))
-                    (or
-                        (and
-                            (<= (start_day ?reserva1) (start_day ?reserva))
-                            (<= (end_day ?reserva1) (start_day ?reserva))
-                        )
-                        (and
-                            (>= (start_day ?reserva1) (end_day ?reserva))
-                            (>= (end_day ?reserva1) (end_day ?reserva))
-                        )
-                    )
+                    (<= (end_day ?reserva1) (start_day ?reserva))
+                    (>= (start_day ?reserva1) (end_day ?reserva))
                 )
             )
         )
