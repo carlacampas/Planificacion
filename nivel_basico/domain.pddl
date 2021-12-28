@@ -1,5 +1,5 @@
 (define (domain hotel)
-    (:requirements :strips :equality :adl :typing)
+    (:requirements :strips :equality :adl :typing :fluents)
     (:types habitacion - item
             dia - item
             reserva - item)
