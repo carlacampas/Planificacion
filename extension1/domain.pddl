@@ -1,8 +1,8 @@
 (define (domain hotel)
     (:requirements :strips :equality :adl :typing)
-    (:types habitacion - item
-            dia - item
-            reserva - item)
+    (:types habitacion - object
+            dia - object
+            reserva - object)
     (:functions
         (tamano_habitacion ?habitacion - habitacion)
         (tamano_reserva ?reserva - reserva)
@@ -19,7 +19,6 @@
             (>= (tamano_habitacion ?habitacion) (tamano_reserva ?reserva))
         )
         :effect (and
-            
             (forall (?dia - dia)
                 (when 
                     (forall (?dia - dia)
