@@ -5,6 +5,8 @@
         r12 r22 r32 r42 r52 r62 r72 r82 r92 - reserva
     )
     (:init
+        (= (reservas) 0)
+        
         (= (start_day r1) 1)
         (= (start_day r2) 2)
         (= (start_day r3) 3)
