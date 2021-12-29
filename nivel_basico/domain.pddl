@@ -18,9 +18,7 @@
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
             (forall (?r1 - reserva)
                 (or
-                    (= ?r ?r1)
                     (visitada ?r1)
-                    (< (tamano_habitacion ?h) (tamano_reserva ?r1))
                     (< (end_day ?r1) (start_day ?r))
                     (> (start_day ?r1) (end_day ?r))
                 )
