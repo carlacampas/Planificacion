@@ -7,6 +7,7 @@
         (tamano_reserva ?reserva - reserva)
         (start_day ?reserva - reserva)
         (end_day ?reserva - reserva)
+        (dias_libres)
     )
     (:predicates
         (visitada ?reserva - reserva)
@@ -30,6 +31,7 @@
         :effect (and 
             (visitada ?reserva)
             (reservada ?reserva)
+            (decrease (dias_libres) (- (end_day ?reserva) (start_day ?reserva)))
         )
     )
 
@@ -56,6 +58,9 @@
                 )
             )
         )
-        :effect (not (reservada ?reserva1))
+        :effect (and 
+            (not (reservada ?reserva1))
+            (increase (dias_libres) (- (end_day ?reserva1) (start_day ?reserva1)))
+        )
     )
 )

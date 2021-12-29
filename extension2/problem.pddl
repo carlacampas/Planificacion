@@ -69,5 +69,4 @@
     )
 
     (:goal (or (forall (?res - reserva) (visitada ?res))))
-    (:metric minimize (dias_libres))
 )
