@@ -1,34 +1,31 @@
 (define (domain hotel)
     (:requirements :strips :equality :adl :typing :fluents)
-    (:types habitacion - item
-            dia - item
-            reserva - item)
+    (:types habitacion - object
+            reserva - object)
     (:functions
-        (tamano_habitacion ?habitacion - habitacion)
-        (tamano_reserva ?reserva - reserva)
+        (tamano_habitacion ?h - habitacion)
+        (tamano_reserva ?r - reserva)
+        (start_day ?r - reserva)
+        (end_day ?r - reserva)
     )
     (:predicates
-        (libre ?habitacion - habitacion ?dia - dia)
-        (reservado ?reserva - reserva ?dia - dia)
-        (visitada ?reserva - reserva)
+        (visitada ?r - reserva)
     )
     (:action reservar
-        :parameters (?habitacion - habitacion ?reserva - reserva)
+        :parameters (?h - habitacion ?r - reserva)
         :precondition (and 
-            (not (visitada ?reserva))
-            (>= (tamano_habitacion ?habitacion) (tamano_reserva ?reserva))
-            (forall (?dia - dia)
+            (not (visitada ?r))
+            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
+            (forall (?r1 - reserva)
                 (or
-                    (libre ?habitacion ?dia)
-                    (not (reservado ?reserva ?dia))
+                    (= ?r ?r1)
+                    (visitada ?r1)
+                    (< (tamano_habitacion ?h) (tamano_reserva ?r1))
+                    (< (end_day ?r1) (start_day ?r))
+                    (> (start_day ?r1) (end_day ?r))
                 )
             )
         )
-        :effect (and
-            (forall (?dia - dia)
-                (when (reservado ?reserva ?dia) (not (libre ?habitacion ?dia)))
-            )
-            (visitada ?reserva)
-        )
+        :effect (visitada ?r)
     )
 )
