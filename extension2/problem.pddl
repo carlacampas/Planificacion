@@ -28,8 +28,8 @@
         (= (tamano_reserva r4) 1)
         (= (tamano_reserva r5) 1)
 
-        (= (orientacion_habitacion h0) 0)
-        (= (orientacion_habitacion h1) 2)
+        (= (orientacion_habitacion h0) 2)
+        (= (orientacion_habitacion h1) 0)
 
         ; n = 0 / s = 1 / e = 2 / o = 3
         (= (pref_orientacion r1) 0)
