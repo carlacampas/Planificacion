@@ -64,7 +64,7 @@
         )
         :effect (and 
             (not (reservada ?r1))
-            (not (habitacion_assignada ?r ?h))
+            (not (habitacion_assignada ?r1 ?h))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
         )
     )
