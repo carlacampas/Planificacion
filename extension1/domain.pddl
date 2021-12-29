@@ -65,4 +65,29 @@
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
         )
     )
+
+    (:action cambio_habitacion 
+        :parameters (?h - habitacion ?h1 - habitacion ?r - reserva)
+        :precondition (and
+            (habitacion_assignada ?r ?h)
+            (not (habitacion_visitada ?r ?h1))
+            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
+            (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
+            (forall (?r1 - reserva)
+                (or
+                    (= ?r ?r1)
+                    (not (reservada ?r1))
+                    (not (habitacion_assignada ?r1 ?h1))
+                    (< (tamano_habitacion ?h) (tamano_reserva ?r1))
+                    (< (end_day ?r1) (start_day ?r))
+                    (> (start_day ?r1) (end_day ?r))
+                )
+            )
+        )
+        :effect (and
+            (not (habitacion_assignada ?r ?h))
+            (habitacion_assignada ?r ?h1)
+            (habitacion_visitada ?r ?h1)
+        )
+    )
 )
