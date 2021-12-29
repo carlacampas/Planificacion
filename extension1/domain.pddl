@@ -12,6 +12,8 @@
     (:predicates
         (visitada ?r - reserva)
         (reservada ?r - reserva)
+        (habitacion_assignada ?r - reserva ?h - habitacion)
+        (habitacion_visitada ?r - reserva ?h - habitacion)
     )
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)
