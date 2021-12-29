@@ -20,18 +20,14 @@
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)
         :precondition (and 
-            (and 
-                (not (reservada ?r))
-                (not (habitacion_visitada ?h ?r))
-            )
+            (not (reservada ?r))
+            (not (habitacion_visitada ?h ?r))
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h ?r1))
-                    (or
-                        (< (end_day ?r1) (start_day ?r))
-                        (> (start_day ?r1) (end_day ?r))
-                    )
+                    (< (end_day ?r1) (start_day ?r))
+                    (> (start_day ?r1) (end_day ?r))
                 )
             )
         )
