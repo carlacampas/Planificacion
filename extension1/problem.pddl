@@ -5,7 +5,7 @@
         r12 r22 r32 r42 r52 r62 r72 r82 r92 - reserva
     )
     (:init
-        (= (dias_libres) 30)
+        (= (dias_libres) 60) ;num dias totales (30) * num habitaciones
 
         (= (start_day r1) 1)
         (= (start_day r2) 2)

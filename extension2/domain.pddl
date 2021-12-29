@@ -8,6 +8,7 @@
         (start_day ?reserva - reserva)
         (end_day ?reserva - reserva)
         (dias_libres)
+        (no_orientacion_deseada)
     )
     (:predicates
         (visitada ?reserva - reserva)
