@@ -4,10 +4,15 @@
             reserva - object)
     (:functions
         (tamano_habitacion ?h - habitacion)
+        (orientacion_habitacion ?h - habitacion) ; n = 0 / s = 1 / e = 2 / o = 3
+
         (tamano_reserva ?r - reserva)
         (start_day ?r - reserva)
         (end_day ?r - reserva)
+        (pref_orientacion ?r - reserva) ; n = 0 / s = 1 / e = 2 / o = 3
+        
         (dias_libres)
+        (pref_orient_no_servida)
     )
     (:predicates
         (visitada ?r - reserva)
@@ -32,6 +37,9 @@
             (visitada ?r)
             (reservada ?r)
             (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
+            (when (or (= (pref_orientacion ?r) -1) (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
+                (decrease (pref_orient_no_servida) 1)
+            )
         )
     )
 
@@ -61,6 +69,9 @@
         :effect (and 
             (not (reservada ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
+            (when (or (= (pref_orientacion ?r1) -1) (= (pref_orientacion ?r1) (orientacion_habitacion ?h)))
+                (increase (pref_orient_no_servida) 1)
+            )
         )
     )
 )
