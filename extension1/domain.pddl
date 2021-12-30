@@ -9,22 +9,23 @@
         (end_day ?r - reserva)
         (dias_libres)
     )
+
     (:predicates
         (visitada ?r - reserva)
         (reservada ?r - reserva)
-        (habitacion_assignada ?r - reserva ?h - habitacion)
-        (habitacion_visitada ?r - reserva ?h - habitacion)
+        (habitacion_assignada ?h - habitacion ?r - reserva)
+        (habitacion_visitada ?h - habitacion ?r - reserva)
     )
+
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)
         :precondition (and 
-            (not (visitada ?r))
+            (not (reservada ?r))
+            (not (habitacion_visitada ?h ?r))
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
             (forall (?r1 - reserva)
                 (or
-                    (= ?r ?r1)
-                    (not (reservada ?r1))
-                    (< (tamano_habitacion ?h) (tamano_reserva ?r1))
+                    (not (habitacion_assignada ?h ?r1))
                     (< (end_day ?r1) (start_day ?r))
                     (> (start_day ?r1) (end_day ?r))
                 )
@@ -33,6 +34,8 @@
         :effect (and 
             (visitada ?r)
             (reservada ?r)
+            (habitacion_assignada ?h ?r)
+            (habitacion_visitada ?h ?r)
             (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
         )
     )
@@ -42,6 +45,7 @@
         :precondition (and 
             (not (visitada ?r))
             (reservada ?r1)
+            (habitacion_assignada ?h ?r1)
             ;(not (= ?reserva ?reserva1)) -- absurd perk no pot ser reservat + no visitat
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
             (>= (tamano_habitacion ?h) (tamano_reserva ?r1))
@@ -62,6 +66,7 @@
         )
         :effect (and 
             (not (reservada ?r1))
+            (not (habitacion_assignada ?h ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
         )
     )
