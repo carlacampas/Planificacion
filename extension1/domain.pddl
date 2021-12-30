@@ -3,18 +3,18 @@
     (:types habitacion - object
             reserva - object)
     (:functions
-        (tamano_habitacion ?h - habitacion)
-        (tamano_reserva ?r - reserva)
-        (start_day ?r - reserva)
-        (end_day ?r - reserva)
-        (dias_libres)
+        (tamano_habitacion ?h - habitacion)     ; capacidad maxima de una habitacion 1-4
+        (tamano_reserva ?r - reserva)           ; cantidad de personas dde la reserva
+        (start_day ?r - reserva)               ; dia que desean empezar - FIJO
+        (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
+        (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
     )
 
     (:predicates
-        (visitada ?r - reserva)
-        (reservada ?r - reserva)
-        (habitacion_assignada ?h - habitacion ?r - reserva)
-        (habitacion_visitada ?h - habitacion ?r - reserva)
+        (visitada ?r - reserva)                                 ;si una reserva ha entrado en reservar correctamente (se ha reservado en algun momento)
+        (reservada ?r - reserva)                             ;si en este momento la reserva se ha podido efectuar correctamente           
+        (habitacion_assignada ?h - habitacion ?r - reserva)  ;si la habitacion esta asignada a una reserva
+        (habitacion_visitada ?h - habitacion ?r - reserva)      ; si la combinacion de habitacion - reserva ha sido visitada
     )
 
     (:action reservar

@@ -14,9 +14,11 @@
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
         (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
-        (orientacion_habitacion ?h - habitacion)   ; orientacion: n = 0 / s = 1 / e = 2 / o = 3
-        (pref_orientacion ?r - reserva)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
-        (pref_orient_no_servida)              ; cantidad de preferencias no servidas -> inicializado a num reservas
+        ;(orientacion_habitacion ?h - habitacion)   ; orientacion: n = 0 / s = 1 / e = 2 / o = 3
+        ;(pref_orientacion ?r - reserva)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
+        ;(pref_orient_no_servida)              ; cantidad de preferencias no servidas -> inicializado a num reservas
+        (camas_libres)                          ; inicializado a (sum(capacidad_hab)) --> se hara desde el generador, por ahora hard codea
+
     )
 
     (:predicates
@@ -46,9 +48,7 @@
             (habitacion_assignada ?h ?r)
             (habitacion_visitada ?h ?r)
             (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
-            (when (or (= (pref_orientacion ?r) -1) (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
-                (decrease (pref_orient_no_servida) 1)
-            )
+            (decrease (camas_libres) (tamano_reserva ?r))
         )
     )
 
@@ -81,9 +81,7 @@
             (not (reservada ?r1))
             (not (habitacion_assignada ?h ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
-            (when (or (= (pref_orientacion ?r1) -1) (= (pref_orientacion ?r1) (orientacion_habitacion ?h)))
-                (increase (pref_orient_no_servida) 1) ;incrementamos si perdemos preferencia 
-            )
+            (decrease (camas_libres) (tamano_reserva ?r)) 
         )
     )
 
@@ -100,15 +98,11 @@
                     (> (start_day ?r1) (end_day ?r))
                 )
             )
-            (not (= (pref_orientacion ?r) -1)) 
-            (not (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
-            (= (pref_orientacion ?r) (orientacion_habitacion ?h1))
         )
         :effect (and
             (not (habitacion_assignada ?h ?r))
             (habitacion_assignada ?h1 ?r)
             (habitacion_visitada ?h1 ?r)
-            (decrease (pref_orient_no_servida) 1)
         )
     )
 )

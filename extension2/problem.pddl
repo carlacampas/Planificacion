@@ -41,7 +41,7 @@
 
     (:goal (or (forall (?res - reserva) (visitada ?res))))
     ;(:metric minimize (+ (dias_libres) (pref_orient_no_servida)))
-    (:metric minimize (+ (/ (pref_orient_no_servida) 5) (* (/ (dias_libres) 60) 3))
+    (:metric minimize (+ (/ (pref_orient_no_servida) 5) (* (/ (dias_libres) 60) 3)))
     ;;; dias libres esta en funcion de hab * dias
     ;;; pref_orient_no_servida esta en funcion de reservas
 )
