@@ -90,7 +90,7 @@
             (not (habitacion_assignada ?h ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
             ;(decrease (camas_libres) (tamano_reserva ?r)) 
-            (decrease (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h) (tamano_reserva ?r)) (tamano_habitacion ?h)) 100))
+            (decrease (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h) (tamano_reserva ?r1)) (tamano_habitacion ?h)) 100))
             (decrease (cantidad_reservas) 1)    
         )
     )
