@@ -6,10 +6,11 @@
         ;r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 - reserva
     )
     (:init
-        (= (dias_libres) 60) ;num dias totales (30) * num habitaciones
+        (= (dias_libres) 120) ;num dias totales (30) * num habitaciones
         ;(= (camas_libres) 14) ;sum(tamano_habit)
         (= (suma_porcentaje) 0)
-        (= (camas_reserva) 0)
+        (= (cantidad_reservas) 0)
+        ;(= (camas_reserva) 0)
 
         (= (start_day r1) 1)
         (= (start_day r2) 1)
@@ -78,5 +79,5 @@
     )
 
     (:goal (or (forall (?res - reserva) (visitada ?res))))
-    (:metric minimize (+ (suma_porcentaje) (* (/ (dias_libres) 60) 3)))
+    (:metric minimize (+ (/ (suma_porcentaje) (cantidad_reservas)) (* (/ (dias_libres) 60) 3)))
 )

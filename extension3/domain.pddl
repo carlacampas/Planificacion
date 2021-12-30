@@ -20,8 +20,8 @@
         
         ;(camas_libres)                          ; inicializado a (sum(capacidad_hab)) --> se hara desde el generador, por ahora hard codea
         (suma_porcentaje)
-        (camas_reserva)
-        ;(cantidad_reservas)
+        ;(camas_reserva)
+        (cantidad_reservas)
 
     )
 
@@ -53,8 +53,9 @@
             (habitacion_visitada ?h ?r)
             (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
             ;(decrease (camas_libres) (tamano_reserva ?r))
-            (assign (suma_porcentaje) (- 1 (/ (+ (* (suma_porcentaje) (camas_reserva)) (tamano_reserva ?r)) (+ (camas_reserva) (tamano_habitacion ?h)))))
-            (increase (camas_reserva) (tamano_habitacion ?h))
+            (increase (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h) (tamano_reserva ?r)) (tamano_habitacion ?h)) 100))
+            (increase (cantidad_reservas) 1)
+
         )
     )
 
@@ -64,6 +65,7 @@
             (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
             (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
+            (< (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h) (tamano_reserva ?r1))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
                 (and   
                     (>= (end_day ?r1) (start_day ?r))
@@ -88,8 +90,8 @@
             (not (habitacion_assignada ?h ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
             ;(decrease (camas_libres) (tamano_reserva ?r)) 
-            (assign (suma_porcentaje) (- 1 (/ (- (* (suma_porcentaje) (camas_reserva)) (tamano_reserva ?r)) (- (camas_reserva) (tamano_habitacion ?h)))))
-            (decrease (camas_reserva) (tamano_habitacion ?h))
+            (decrease (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h) (tamano_reserva ?r)) (tamano_habitacion ?h)) 100))
+            (decrease (cantidad_reservas) 1)    
         )
     )
 
@@ -99,7 +101,7 @@
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
             (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
-            (< (tamano_habitacion ?h1) (tamano_habitacion ?h)) ;nos interesará cambiar si encontramos una habitación de capacidad menor donde todavía cabe la reserva
+            ;(< (tamano_habitacion ?h1) (tamano_habitacion ?h)) ;nos interesará cambiar si encontramos una habitación de capacidad menor donde todavía cabe la reserva
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h1 ?r1))
@@ -112,12 +114,9 @@
             (not (habitacion_assignada ?h ?r))
             (habitacion_assignada ?h1 ?r)
             (habitacion_visitada ?h1 ?r)
-            
-            (assign (suma_porcentaje) (- 1 (/ (- (* (suma_porcentaje) (camas_reserva)) (tamano_reserva ?r)) (- (camas_reserva) (tamano_habitacion ?h)))))
-            (decrease (camas_reserva) (tamano_habitacion ?h)) ;;eliminamos la habitacion antigua de porcentaje y de camas_reserva
-            (assign (suma_porcentaje) (- 1 (/ (+ (* (suma_porcentaje) (camas_reserva)) (tamano_reserva ?r)) (+ (camas_reserva) (tamano_habitacion ?h1)))))
-            (increase (camas_reserva) (tamano_habitacion ?h1)) ;;añadimos la nueva ahabitacion a porcentaje y a camas_reserva
-
+            (decrease (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h) (tamano_reserva ?r)) (tamano_habitacion ?h)) 100))
+            (increase (suma_porcentaje) (* (/ (- (tamano_habitacion  ?h1) (tamano_reserva ?r)) (tamano_habitacion ?h1)) 100))
+            ;cantidad_reservas no cambia
         )
     )
 )
