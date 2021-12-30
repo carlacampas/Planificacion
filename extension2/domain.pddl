@@ -3,38 +3,34 @@
     (:types habitacion - object
             reserva - object)
     (:functions
-        (tamano_habitacion ?h - habitacion)
-        (tamano_reserva ?r - reserva)
-        (start_day ?r - reserva)
-        (end_day ?r - reserva)
-        (dias_libres)
-        (orientacion_habitacion ?h - habitacion) ; no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
-        (pref_orientacion ?r - reserva) ; no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
-        (pref_orient_no_servida)
+        (tamano_habitacion ?h - habitacion)     ; capacidad maxima de una habitacion 1-4
+        (tamano_reserva ?r - reserva)           ; cantidad de personas dde la reserva
+        (start_day ?r - reserva)               ; dia que desean empezar - FIJO
+        (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
+        (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
+        (orientacion_habitacion ?h - habitacion)   ; orientacion: n = 0 / s = 1 / e = 2 / o = 3
+        (pref_orientacion ?r - reserva)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
+        (pref_orient_no_servida)              ; cantidad de preferencias no servidas -> inicializado a num reservas
     )
 
     (:predicates
-        (visitada ?r - reserva)
-        (reservada ?r - reserva)
-        (habitacion_assignada ?h - habitacion ?r - reserva)
-        (habitacion_visitada ?h - habitacion ?r - reserva)
+        (visitada ?r - reserva)                         ;si una reserva ha entrado en reservar correctamente (se ha reservado en algun momento)
+        (reservada ?r - reserva)                     ;si en este momento la reserva se ha podido efectuar correctamente
+        (habitacion_assignada ?h - habitacion ?r - reserva)    ; si la habitacion esta asignada a una reserva
+        (habitacion_visitada ?h - habitacion ?r - reserva)        ; si la combinacion de habitacion - reserva ha sido visitada
     )
 
     (:action reservar
-        :parameters (?h - habitacion ?r - reserva)
+        :parameters (?h - habitacion ?r - reserva)      ; reservamos una reserva en una habitacion
         :precondition (and 
-            (and 
-                (not (reservada ?r))
-                (not (habitacion_visitada ?h ?r))
-            )
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
-            (forall (?r1 - reserva)
+            (not (reservada ?r))                        ; si la habitacion no esta en la lista de reservados
+            (not (habitacion_visitada ?h ?r))           ; si la habitacion - reserva no ha sido visitada
+            (>= (tamano_habitacion ?h) (tamano_reserva ?r)) ; si el grupo cabe en la habitacion
+            (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
                     (not (habitacion_assignada ?h ?r1))
-                    (or
-                        (< (end_day ?r1) (start_day ?r))
-                        (> (start_day ?r1) (end_day ?r))
-                    )
+                    (< (end_day ?r1) (start_day ?r))
+                    (> (start_day ?r1) (end_day ?r))
                 )
             )
         )
@@ -51,16 +47,13 @@
     )
 
     (:action eliminar
-        :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
+        :parameters (?h - habitacion ?r - reserva ?r1 - reserva)    ; para dos reservas
         :precondition (and 
-            (not (visitada ?r))
-            (reservada ?r1)
-            (habitacion_assignada ?h ?r1)
-            ;(not (= ?reserva ?reserva1)) -- absurd perk no pot ser reservat + no visitat
+            (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
+            (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r1))
-            (or
-                (and
+            (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
+                (and   
                     (>= (end_day ?r1) (start_day ?r))
                     (<= (end_day ?r1) (end_day ?r))
                 )
@@ -72,6 +65,10 @@
                     (<= (start_day ?r1) (start_day ?r))
                     (>= (end_day ?r1) (end_day ?r))
                 )
+                (and
+                    (>= (start_day ?r1) (start_day ?r))
+                    (<= (end_day ?r1) (end_day ?r))
+                )
             )
         )
         :effect (and 
@@ -79,12 +76,12 @@
             (not (habitacion_assignada ?h ?r1))
             (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
             (when (or (= (pref_orientacion ?r1) -1) (= (pref_orientacion ?r1) (orientacion_habitacion ?h)))
-                (increase (pref_orient_no_servida) 1)
+                (increase (pref_orient_no_servida) 1) ;incrementamos si perdemos preferencia 
             )
         )
     )
 
-    (:action cambio_habitacion 
+    (:action cambio_habitacion ; en este caso solo nos itneresa cambiar si hay algun "beneficio", solo cambiamos si hay un incremento en orientacion
         :parameters (?h - habitacion ?h1 - habitacion ?r - reserva)
         :precondition (and
             (habitacion_assignada ?h ?r)
