@@ -101,7 +101,6 @@
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
             (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
-            ;(< (tamano_habitacion ?h1) (tamano_habitacion ?h)) ;nos interesará cambiar si encontramos una habitación de capacidad menor donde todavía cabe la reserva
             (< (tamano_habitacion ?h1) (tamano_habitacion ?h))
             (forall (?r1 - reserva)
                 (or
