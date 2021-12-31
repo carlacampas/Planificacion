@@ -65,7 +65,7 @@
             (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
             (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano_habitacion ?h) (tamano_reserva ?r))
-            (< (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h) (tamano_reserva ?r1))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
+            ;(< (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h) (tamano_reserva ?r1))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
                 (and   
                     (>= (end_day ?r1) (start_day ?r))
@@ -101,7 +101,7 @@
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
             (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
-            ;(< (tamano_habitacion ?h1) (tamano_habitacion ?h)) ;nos interesará cambiar si encontramos una habitación de capacidad menor donde todavía cabe la reserva
+            (< (tamano_habitacion ?h1) (tamano_habitacion ?h)) ;nos interesará cambiar si encontramos una habitación de capacidad menor donde todavía cabe la reserva
             (< (tamano_habitacion ?h1) (tamano_habitacion ?h))
             (forall (?r1 - reserva)
                 (or

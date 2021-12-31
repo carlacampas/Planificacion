@@ -1,14 +1,14 @@
 (define (problem extension3) (:domain hotel)
     (:objects
     	h1 h2 h3 h4 - habitacion
-    	r1 r2 r3 r4 - reserva
+    	r1  r2  r3  r4 - reserva
         r11 r22 r33 r44 - reserva
         ;r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 - reserva
     )
     (:init
         (= (dias_libres) 120) ;num dias totales (30) * num habitaciones
         ;(= (camas_libres) 14) ;sum(tamano_habit)
-        (= (suma_porcentaje) 0)
+        (= (suma_porcentaje) 100)
         (= (cantidad_reservas) 0)
         ;(= (camas_reserva) 0)
 
