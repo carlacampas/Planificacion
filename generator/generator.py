@@ -3,8 +3,23 @@
 import sys
 from random import randrange
 
+# Some constants
+MIN_N_ROOMS = 1
+MIN_N_RESERVATIONS = 1
 
+DAYS = 30
+
+MIN_ROOM_CAPACITY = 1
+MAX_ROOM_CAPACITY = 4
+
+MIN_PREF_ORIENTATION = -1
+MIN_ORIENTATION = 0
+MAX_ORIENTATION = 4
+
+# Global variables
 f = open ("problem.pddl", "w")
+diasLibres = 0
+sumCamas = 0
 
 def usage():
     print("\n")
@@ -33,38 +48,59 @@ def writeObjects(nRooms, nReservations):
     f.write("\t)\n")
 
 def writeInit(extension, nRooms, nReservations):
+    global diasLibres, sumCamas
     f.write("\t(:init\n")
-    if extension > 0:
-        # Write dias_libres
-        diasLibres = 30 * nRooms
-        f.write("\t\t(= (dias_libres) " + str(diasLibres) + ")\n")
-    # TODO: if extension > 1: ...
-    f.write("\n")
 
-    # Write random start_day
+    # Write dias_libres
+    if extension > 0:
+        diasLibres = DAYS * nRooms
+        f.write("\t\t(= (dias_libres) " + str(diasLibres) + ")\n")
+        f.write("\n")
+
+    # Write start_day
     startDayList = []
     for i in range(0, nReservations):
-        startDay = randrange(1,29)  # Staying overnight means max day is 29
+        startDay = randrange(1, DAYS - 1)  # Staying overnight means max day is 29
         startDayList.append(startDay)
         f.write("\t\t(= (start_day r" + str(i) + ") " + str(startDay) + ")\n")
     f.write("\n")
 
-    # Write random end_day
+    # Write end_day
     for i in range(0, nReservations):
-        endDay = randrange(startDayList[i]+1, 30)   # endDay must be larger than startDay
+        endDay = randrange(startDayList[i]+1, DAYS)   # endDay must be larger than startDay
         f.write("\t\t(= (end_day r" + str(i) + ") " + str(endDay) + ")\n")
     f.write("\n")
 
-    # Write random tamano_habitacion
+    # Write tamano_habitacion
     for i in range(0, nRooms):
-        tamanoHabitacion = randrange(1,5)
+        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY)
+        sumCamas += tamanoHabitacion
         f.write("\t\t(= (tamano_habitacion h" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
     f.write("\n")
 
-    # Write random tamano_reserva
+    # Write tamano_reserva
     for i in range(0, nReservations):
-        tamanoHabitacion = randrange(1,5)
+        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY)
         f.write("\t\t(= (tamano_reserva r" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
+    f.write("\n")
+
+
+    # Write pref_orient_no_servida
+    if extension == 2:
+        f.write("\t\t(= (pref_orient_no_servida) " + str(sumCamas) + ")\n")
+        f.write("\n")
+
+        # Write orientacion_habitacion
+        for i in range(0, nRooms):
+            orientacion = randrange(MIN_ORIENTATION, MAX_ORIENTATION)
+            f.write("\t\t(= (orientacion_habitacion h" + str(i) + ") " + str(orientacion) + ")\n")
+        f.write("\n")
+
+        # Write pref_orientacion
+        for i in range(0, nReservations):
+            orientacion = randrange(MIN_PREF_ORIENTATION, MAX_ORIENTATION)
+            f.write("\t\t(= (pref_orientacion r" + str(i) + ") " + str(orientacion) + ")\n")
+
     f.write("\t)\n")
     f.write("\n")
 
@@ -72,8 +108,14 @@ def writeGoal():
     f.write("\t(:goal (or (forall (?res - reserva) (visitada ?res))))\n")
 
 def writeMetric(extension):
-    if extension > 0:
+    if extension == 0:
+        return
+    elif extension == 1:
         f.write("\t(:metric minimize (dias_libres))\n")
+    elif extension == 2:
+        # TODO: figure out last 3
+        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (dias_libres) " + str(diasLibres) + ") "+ str(3) + ")))")
+
 
 def main():
     # Check input
@@ -85,16 +127,18 @@ def main():
         nReservations = int(sys.argv[3])
     except ValueError:
         usage()
-    if extension < 0 or extension > 4 or nRooms < 1 or nReservations < 1:
+    if extension < 0 or extension > 4 or nRooms < MIN_N_ROOMS or nReservations < MIN_N_RESERVATIONS:
         usage()
-        
+
     # Write file
     f.write("(define (problem generated) (:domain hotel)\n") # Open header
     writeObjects(nRooms, nReservations)
     writeInit(extension, nRooms, nReservations)
     writeGoal()
     writeMetric(extension)
-    f.write(")") # Close header
+    f.write("\n)") # Close header
+
+    # Done
     print("File generated!")
 
 
