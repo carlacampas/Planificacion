@@ -17,16 +17,16 @@ MIN_ORIENTATION = 0
 MAX_ORIENTATION = 4
 
 # Global variables
-f = open ("problem.pddl", "w")
 diasLibres = 0
 sumCamas = 0
 
 def usage():
     print("\n")
-    print("Usage: python3 generator.py extension nRooms nReservations\n")
+    print("Usage: python3 generator.py extension nRooms nReservations [outputFileName]\n")
     print("extension: extension to be used [0-4] (0 for basic level)")
     print("nRooms: number of rooms in the hotel [1...]")
     print("nReservations: number of reservations in the hotel [1...]")
+    print("outputFileName: name for the output file")
     print("\n")
     exit(1)
 
@@ -55,54 +55,46 @@ def writeInit(extension, nRooms, nReservations):
     if extension > 0:
         diasLibres = DAYS * nRooms
         f.write("\t\t(= (dias_libres) " + str(diasLibres) + ")\n")
-        f.write("\n")
 
     # Write start_day
     startDayList = []
     for i in range(0, nReservations):
-        startDay = randrange(1, DAYS - 1)  # Staying overnight means max day is 29
+        startDay = randrange(1, DAYS)  # Staying overnight means max day is 29
         startDayList.append(startDay)
         f.write("\t\t(= (start_day r" + str(i) + ") " + str(startDay) + ")\n")
-    f.write("\n")
 
     # Write end_day
     for i in range(0, nReservations):
-        endDay = randrange(startDayList[i]+1, DAYS)   # endDay must be larger than startDay
+        endDay = randrange(startDayList[i]+1, DAYS + 1)   # endDay must be larger than startDay
         f.write("\t\t(= (end_day r" + str(i) + ") " + str(endDay) + ")\n")
-    f.write("\n")
 
     # Write tamano_habitacion
     for i in range(0, nRooms):
-        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY)
+        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
         sumCamas += tamanoHabitacion
         f.write("\t\t(= (tamano_habitacion h" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
-    f.write("\n")
+
 
     # Write tamano_reserva
     for i in range(0, nReservations):
-        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY)
+        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
         f.write("\t\t(= (tamano_reserva r" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
-    f.write("\n")
 
-
-    # Write pref_orient_no_servida
     if extension == 2:
+        # Write pref_orient_no_servida
         f.write("\t\t(= (pref_orient_no_servida) " + str(sumCamas) + ")\n")
-        f.write("\n")
 
         # Write orientacion_habitacion
         for i in range(0, nRooms):
-            orientacion = randrange(MIN_ORIENTATION, MAX_ORIENTATION)
+            orientacion = randrange(MIN_ORIENTATION, MAX_ORIENTATION + 1)
             f.write("\t\t(= (orientacion_habitacion h" + str(i) + ") " + str(orientacion) + ")\n")
-        f.write("\n")
 
         # Write pref_orientacion
         for i in range(0, nReservations):
-            orientacion = randrange(MIN_PREF_ORIENTATION, MAX_ORIENTATION)
+            orientacion = randrange(MIN_PREF_ORIENTATION, MAX_ORIENTATION + 1)
             f.write("\t\t(= (pref_orientacion r" + str(i) + ") " + str(orientacion) + ")\n")
 
     f.write("\t)\n")
-    f.write("\n")
 
 def writeGoal():
     f.write("\t(:goal (or (forall (?res - reserva) (visitada ?res))))\n")
@@ -119,7 +111,7 @@ def writeMetric(extension):
 
 def main():
     # Check input
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4:
         usage()
     try:
         extension = int(sys.argv[1])
@@ -130,16 +122,24 @@ def main():
     if extension < 0 or extension > 4 or nRooms < MIN_N_ROOMS or nReservations < MIN_N_RESERVATIONS:
         usage()
 
+    # Create file
+    global f, fileName
+    if len(sys.argv) == 5:
+        fileName = sys.argv[4]
+    else:
+        fileName = "generated"
+    f = open(fileName + ".pddl", "w")
+
     # Write file
-    f.write("(define (problem generated) (:domain hotel)\n") # Open header
+    f.write("(define (problem " + fileName.rsplit('/', 1)[-1] + ") (:domain hotel)\n") # Open header
     writeObjects(nRooms, nReservations)
     writeInit(extension, nRooms, nReservations)
     writeGoal()
     writeMetric(extension)
-    f.write("\n)") # Close header
+    f.write(")") # Close header
 
     # Done
-    print("File generated!")
+    f.close()
 
 
 if __name__ == "__main__":
