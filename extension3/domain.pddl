@@ -55,12 +55,12 @@
             (not (habitacion_visitada ?h ?r))               ; si la habitacion - reserva no ha sido visitada
             (>= (tamano_habitacion ?h) (tamano_reserva ?r)) ; si el grupo cabe en la habitacion
             
-            ;(forall (?h1 - habitacion)
-            ;    (or
-            ;        (< (tamano_habitacion ?h1) (tamano_reserva ?r))
-            ;        (<= (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h1) (tamano_reserva ?r)))
-            ;    )
-            ;)
+            (forall (?h1 - habitacion)
+                (or
+                    (< (tamano_habitacion ?h1) (tamano_reserva ?r))
+                    (<= (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h1) (tamano_reserva ?r)))
+                )
+            )
 
             (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or

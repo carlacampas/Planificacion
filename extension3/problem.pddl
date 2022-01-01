@@ -4,9 +4,9 @@
     	;r1  r2  r3  r4 r5 r6 r7 r8 r9 - reserva
         ;r11 r22 r33 r44 r55 r66 r77 r88 r99 - reserva
         
-        h1 h2 h3 h4 - habitacion
-        r1  r2  r3  r4 - reserva
-        r11 r22 r33 r44 - reserva
+        ;h1 h2 h3 h4 - habitacion
+        ;r1  r2  r3  r4 - reserva
+        ;r11 r22 r33 r44 - reserva
 
         ;h1 - habitacion
         ;r1 r2 r3 r4 - reserva
