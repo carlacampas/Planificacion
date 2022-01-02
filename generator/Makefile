@@ -17,4 +17,4 @@ csv:
 clean:
 		rm -rf g0 g1 g2 g3 g4
 		rm -rf __pycache__
-		rm timeResults.csv
+		rm -f timeResults.csv
