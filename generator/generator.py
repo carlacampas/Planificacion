@@ -52,9 +52,19 @@ def writeInit(extension, nRooms, nReservations):
     f.write("\t(:init\n")
 
     # Write dias_libres
-    if extension > 0:
+    if extension == 1 or extension == 2:
         diasLibres = DAYS * nRooms
         f.write("\t\t(= (dias_libres) " + str(diasLibres) + ")\n")
+
+    # Write cantidad_reservas, reservas_descartadas, xctj_ocupacion
+    if extension >= 3:
+        f.write("\t\t(= (cantidad_reservas) 0)\n")
+        f.write("\t\t(= (reservas_descartadas) 0)\n")
+        f.write("\t\t(= (xctj_ocupacion) 0)\n")
+
+    # Write habitaciones_unused
+    if extension == 4:
+        f.write("\t\t(= (habitaciones_unused) " + str(nRooms) + ")\n")
 
     # Write start_day
     startDayList = []
@@ -96,18 +106,25 @@ def writeInit(extension, nRooms, nReservations):
 
     f.write("\t)\n")
 
-def writeGoal():
-    f.write("\t(:goal (or (forall (?res - reserva) (visitada ?res))))\n")
+def writeGoal(extension):
+    if extension < 3:
+        f.write("\t(:goal (or (forall (?res - reserva) (visitada ?res))))\n")
+    elif extension >= 3:
+        f.write("\t(:goal (or (forall (?res - reserva) (or (visitada ?res) (descartada ?res)))))\n")
 
-def writeMetric(extension):
+
+def writeMetric(extension, nRooms, nReservations):
     if extension == 0:
         return
     elif extension == 1:
         f.write("\t(:metric minimize (dias_libres))\n")
     elif extension == 2:
         # TODO: figure out last 3
-        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (dias_libres) " + str(diasLibres) + ") "+ str(3) + ")))")
-
+        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (dias_libres) " + str(diasLibres) + ") "+ str(3) + ")))\n")
+    elif extension == 3:
+        f.write("\t(:metric maximize (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (cantidad_reservas) (- " + str(nReservations) + " (reservas_descartadas)))))\n")
+    elif extension == 4:
+        f.write("\t(:metric maximize (+ (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (habitaciones_unused) " + str(nRooms) + ")) (/ (cantidad_reservas) (- " + str(nReservations) + " (reservas_descartadas)))))\n")
 
 def main():
     # Check input
@@ -134,8 +151,8 @@ def main():
     f.write("(define (problem " + fileName.rsplit('/', 1)[-1] + ") (:domain hotel)\n") # Open header
     writeObjects(nRooms, nReservations)
     writeInit(extension, nRooms, nReservations)
-    writeGoal()
-    writeMetric(extension)
+    writeGoal(extension)
+    writeMetric(extension, nRooms, nReservations)
     f.write(")") # Close header
 
     # Done

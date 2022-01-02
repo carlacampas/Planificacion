@@ -3,10 +3,10 @@ import constants
 
 # Generate instances of problems
 print("Working on it...")
-for extension in range(1,constants.EXTENSIONS):
+for extension in constants.EXTENSIONS:
     for i in range(1, constants.N_PROBLEMS + 1):
-        problemSolvable = False
-        while not problemSolvable:
+        unsolvable = True
+        while unsolvable:
             if extension == 0:
                 domainFile = "../nivel_basico" + "/domain.pddl"
             else:
@@ -19,10 +19,17 @@ for extension in range(1,constants.EXTENSIONS):
 
             # Check if plan can be solved. If not, generate new problem until it can be solved
             f = open(outputFile, 'r')
-            time = f.readlines()[-2].strip().split()[0]
-            if time == 'ff:':   # Problem cannot be solved
+            lines = f.readlines()
+            time = lines[-2].strip().split()[0]
+            if extension < 3:
+                unsolvable = time == "ff:"
+            else:
+                unsolvable = False
+            #     resultLine = lines[-12]
+            #     if "problem proven unsolvable" in resultLine:
+            #         unsolvable = True
+            #         print("repeat")
+            if unsolvable:   # Problem cannot be solved
                 command = "python3 generator.py " + str(extension) + " " + str(i) + " " + str(4*i) + " " + fileName
                 os.system(command)
-            else:
-                problemSolvable = True
 print("Done!")

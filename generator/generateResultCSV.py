@@ -2,7 +2,7 @@ import glob, os, csv, constants
 
 c = open('timeResults.csv', 'w')
 writer = csv.writer(c)
-for i in range(0, constants.EXTENSIONS):
+for i in constants.EXTENSIONS:
     # Generate a list of all result files
     fileList = sorted(glob.glob("g" + str(i) + "/*.txt"), key=os.path.getmtime)
     row = []
