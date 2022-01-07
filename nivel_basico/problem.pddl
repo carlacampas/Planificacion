@@ -1,12 +1,12 @@
 (define (problem nivel_basico) (:domain hotel)
     (:objects
     	h0 h1 - habitacion
-    	r1 r3 r4 r5 r6 r7 r8 r9 - reserva
+    	r1 r2 r3 r4 r5 r6 r7 r8 r9 - reserva
         r12 r22 r32 r42 r52 r62 r72 r82 r92 - reserva
     )
     (:init
         (= (start_day r1) 1)
-        ;(= (start_day r2) 2)
+        (= (start_day r2) 2)
         (= (start_day r3) 3)
         (= (start_day r4) 4)
         (= (start_day r5) 5)
@@ -24,8 +24,8 @@
         (= (start_day r82) 8)
         (= (start_day r92) 9)
 
-        (= (end_day r1) 2)
-        ;(= (end_day r2) 2)
+        (= (end_day r1) 1)
+        (= (end_day r2) 2)
         (= (end_day r3) 3)
         (= (end_day r4) 4)
         (= (end_day r5) 5)
@@ -47,7 +47,7 @@
         (= (tamano_habitacion h0) 2)
         (= (tamano_habitacion h1) 1)
         (= (tamano_reserva r1) 1)
-        ;(= (tamano_reserva r2) 1)
+        (= (tamano_reserva r2) 1)
         (= (tamano_reserva r3) 1)
         (= (tamano_reserva r4) 1)
         (= (tamano_reserva r5) 1)
