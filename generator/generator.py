@@ -78,15 +78,18 @@ def writeInit(extension, nRooms, nReservations):
         f.write("\t\t(= (end_day r" + str(i) + ") " + str(endDay) + ")\n")
 
     # Write tamano habitacion
+    maxTamano = 0
     for i in range(0, nRooms):
         tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
+        if tamanoHabitacion > maxTamano:
+            maxTamano = tamanoHabitacion
         sumCamas += tamanoHabitacion
         f.write("\t\t(= (tamano h" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
 
 
     # Write tamano reserva
     for i in range(0, nReservations):
-        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
+        tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, maxTamano + 1)
         f.write("\t\t(= (tamano r" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
 
     if extension == 2:
