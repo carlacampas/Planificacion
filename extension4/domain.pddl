@@ -6,7 +6,6 @@
         (tamano ?x - object)
         (start_day ?r - reserva)                ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                  ; dia que desean acabar - FIJO
-        (reservas_descartadas)
         
         (cantidad_reservas)
         (xctj_ocupacion)
@@ -16,30 +15,14 @@
     (:predicates
         (visitada ?r - reserva)                                 ; si una reserva ha entrado en reservar correctamente (se ha reservado en algun momento)
         (reservada ?r - reserva)                                ; si en este momento la reserva se ha podido efectuar correctamente
-        (descartada ?r - reserva)
         (usada ?h - habitacion)
         (habitacion_assignada ?h - habitacion ?r - reserva)     ; si la habitacion esta asignada a una reserva
         (habitacion_visitada ?h - habitacion ?r - reserva)      ; si la combinacion de habitacion - reserva ha sido visitada
     )
 
-    (:action descartar
-        :parameters (?r - reserva)
-        :precondition (and
-            (not (reservada ?r)) 
-            (not (visitada ?r))
-            (not (exists (?h - habitacion) (>= (tamano ?h) (tamano ?r))))
-        )
-        :effect (and 
-            (descartada ?r)
-            (visitada ?r)
-            (increase (reservas_descartadas) 1)
-        )      
-    )
-
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)          ; reservamos una reserva en una habitacion
         :precondition (and 
-            (not (descartada ?r))
             (not (visitada ?r))
             (not (reservada ?r))                            ; si la habitacion no esta en la lista de reservados
             (not (habitacion_visitada ?h ?r))               ; si la habitacion - reserva no ha sido visitada
@@ -54,7 +37,6 @@
 
             (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
-                    (descartada ?r1)
                     (not (habitacion_assignada ?h ?r1))
                     (< (end_day ?r1) (start_day ?r))
                     (> (start_day ?r1) (end_day ?r))
@@ -81,7 +63,6 @@
     (:action cambio_reserva
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
         :precondition (and 
-            (not (descartada ?r1))
             (not (visitada ?r1))
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h ?r1))

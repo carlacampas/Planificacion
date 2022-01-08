@@ -16,7 +16,6 @@
     )
     (:init
         (= (cantidad_reservas) 0)
-        (= (reservas_descartadas) 0)
         (= (xctj_ocupacion) 0)
         (= (habitaciones_unused) 4)
 
@@ -88,7 +87,6 @@
         (or (forall (?res - reserva) 
                 (or 
                     (visitada ?res) 
-                    (descartada ?res)
                 )
             )
     
@@ -96,7 +94,7 @@
     )
     ;(:metric maximize (cantidad_reservas))
     ;(:metric maximize (xctj_ocupacion))
-    (:metric maximize (+ (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (habitaciones_unused) 4)) (/ (cantidad_reservas) (- 8 (reservas_descartadas)))))
+    (:metric maximize (+ (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (habitaciones_unused) 4)) (/ (cantidad_reservas) 8 )))
     ;(:metric maximize (+ (* (/ (xctj_ocupacion) (cantidad_reservas)) 0.5) (* (cantidad_reservas) 0.5)))
     ;(:metric minimize (+ (* (- 0 (/ (xctj_ocupacion) (cantidad_reservas))) 0.5) (* (dias_libres) 0.5)))
     ;(:metric minimize (+ (/ (suma_porcentaje) (cantidad_reservas)) (- (- 5 (reservas_descartadas)) (cantidad_reservas))))
