@@ -6,7 +6,7 @@
         (tamano ?x - object)     ; capacidad maxima de una habitacion 1-4
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
-        (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
+        (reservas_libres)                     
     )
 
     (:predicates
@@ -19,10 +19,10 @@
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)
         :precondition (and 
-            (not (reservada ?r))
-            (not (habitacion_visitada ?h ?r))
-            (>= (tamano ?h) (tamano ?r))
-            (forall (?r1 - reserva)
+            (not (reservada ?r))                        ; si la habitacion no esta en la lista de reservados
+            (not (habitacion_visitada ?h ?r))           ; si la habitacion - reserva no ha sido visitada
+            (>= (tamano ?h) (tamano ?r)) ; si el grupo cabe en la habitacion
+            (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
                     (not (habitacion_assignada ?h ?r1))
                     (< (end_day ?r1) (start_day ?r))
@@ -35,19 +35,16 @@
             (reservada ?r)
             (habitacion_assignada ?h ?r)
             (habitacion_visitada ?h ?r)
-            (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
+            (decrease (reservas_libres) 1)
         )
     )
 
     (:action eliminar
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
         :precondition (and 
-            (not (visitada ?r))
-            (reservada ?r1)
-            (habitacion_assignada ?h ?r1)
-            ;(not (= ?reserva ?reserva1)) -- absurd perk no pot ser reservat + no visitat
+            (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
+            (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano ?h) (tamano ?r))
-            (>= (tamano ?h) (tamano ?r1))
             (or
                 (and
                     (>= (end_day ?r1) (start_day ?r))
@@ -66,7 +63,7 @@
         :effect (and 
             (not (reservada ?r1))
             (not (habitacion_assignada ?h ?r1))
-            (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
+            (increase (reservas_libres) 1)
         )
     )
 )

@@ -53,8 +53,8 @@ def writeInit(extension, nRooms, nReservations):
 
     # Write dias_libres
     if extension == 1 or extension == 2:
-        diasLibres = DAYS * nRooms
-        f.write("\t\t(= (dias_libres) " + str(diasLibres) + ")\n")
+        diasLibres = nReservations
+        f.write("\t\t(= (reservas_libres) " + str(diasLibres) + ")\n")
 
     # Write cantidad_reservas, reservas_descartadas, xctj_ocupacion
     if extension >= 3:
@@ -117,10 +117,10 @@ def writeMetric(extension, nRooms, nReservations):
     if extension == 0:
         return
     elif extension == 1:
-        f.write("\t(:metric minimize (dias_libres))\n")
+        f.write("\t(:metric minimize (reservas_libres))\n")
     elif extension == 2:
         # TODO: figure out last 3
-        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (dias_libres) " + str(diasLibres) + ") "+ str(3) + ")))\n")
+        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (reservas_libres) " + str(diasLibres) + ") "+ str(3) + ")))\n")
     elif extension == 3:
         f.write("\t(:metric maximize (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (cantidad_reservas) (- " + str(nReservations) + " (reservas_descartadas)))))\n")
     elif extension == 4:

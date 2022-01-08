@@ -6,7 +6,7 @@
         (tamano ?x - object)     ; capacidad maxima de una habitacion 1-4 
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
-        (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
+        (reservas_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
         (orientacion_habitacion ?h - habitacion)   ; orientacion: n = 0 / s = 1 / e = 2 / o = 3
         (pref_orientacion ?r - reserva)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
         (pref_orient_no_servida)              ; cantidad de preferencias no servidas -> inicializado a num reservas
@@ -38,7 +38,7 @@
             (reservada ?r)
             (habitacion_assignada ?h ?r)
             (habitacion_visitada ?h ?r)
-            (decrease (dias_libres) (- (end_day ?r) (start_day ?r)))
+            (decrease (reservas_libres) 1)
             (when (or (= (pref_orientacion ?r) -1) (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
                 (decrease (pref_orient_no_servida) 1)
             )
@@ -73,7 +73,7 @@
         :effect (and 
             (not (reservada ?r1))
             (not (habitacion_assignada ?h ?r1))
-            (increase (dias_libres) (- (end_day ?r1) (start_day ?r1)))
+            (increase (reservas_libres) 1)
             (when (or (= (pref_orientacion ?r1) -1) (= (pref_orientacion ?r1) (orientacion_habitacion ?h)))
                 (increase (pref_orient_no_servida) 1) ;incrementamos si perdemos preferencia 
             )
