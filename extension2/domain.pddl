@@ -3,8 +3,7 @@
     (:types habitacion - object
             reserva - object)
     (:functions
-        (tamano_habitacion ?h - habitacion)     ; capacidad maxima de una habitacion 1-4
-        (tamano_reserva ?r - reserva)           ; cantidad de personas dde la reserva
+        (tamano ?x - object)     ; capacidad maxima de una habitacion 1-4 
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
         (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
@@ -25,7 +24,7 @@
         :precondition (and 
             (not (reservada ?r))                        ; si la habitacion no esta en la lista de reservados
             (not (habitacion_visitada ?h ?r))           ; si la habitacion - reserva no ha sido visitada
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r)) ; si el grupo cabe en la habitacion
+            (>= (tamano ?h) (tamano ?r)) ; si el grupo cabe en la habitacion
             (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
                     (not (habitacion_assignada ?h ?r1))
@@ -51,7 +50,7 @@
         :precondition (and 
             (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
             (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
+            (>= (tamano ?h) (tamano ?r))
             (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
                 (and   
                     (>= (end_day ?r1) (start_day ?r))
@@ -86,7 +85,7 @@
         :precondition (and
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
-            (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
+            (>= (tamano ?h1) (tamano ?r))
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h1 ?r1))

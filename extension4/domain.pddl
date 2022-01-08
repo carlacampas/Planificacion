@@ -3,8 +3,7 @@
     (:types habitacion - object
             reserva - object)
     (:functions
-        (tamano_habitacion ?h - habitacion)      ; capacidad maxima de una habitacion 1-4
-        (tamano_reserva ?r - reserva)            ; cantidad de personas dde la reserva
+        (tamano ?x - object)
         (start_day ?r - reserva)                ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                  ; dia que desean acabar - FIJO
         (reservas_descartadas)
@@ -28,7 +27,7 @@
         :precondition (and
             (not (reservada ?r)) 
             (not (visitada ?r))
-            (not (exists (?h - habitacion) (>= (tamano_habitacion ?h) (tamano_reserva ?r))))
+            (not (exists (?h - habitacion) (>= (tamano ?h) (tamano ?r))))
         )
         :effect (and 
             (descartada ?r)
@@ -44,12 +43,12 @@
             (not (visitada ?r))
             (not (reservada ?r))                            ; si la habitacion no esta en la lista de reservados
             (not (habitacion_visitada ?h ?r))               ; si la habitacion - reserva no ha sido visitada
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r)) ; si el grupo cabe en la habitacion
+            (>= (tamano ?h) (tamano ?r)) ; si el grupo cabe en la habitacion
             
             (forall (?h1 - habitacion)
                 (or
-                    (< (tamano_habitacion ?h1) (tamano_reserva ?r))
-                    (<= (- (tamano_habitacion ?h) (tamano_reserva ?r)) (- (tamano_habitacion ?h1) (tamano_reserva ?r)))
+                    (< (tamano ?h1) (tamano ?r))
+                    (<= (- (tamano ?h) (tamano ?r)) (- (tamano ?h1) (tamano ?r)))
                 )
             )
 
@@ -74,7 +73,7 @@
             (reservada ?r)
             (habitacion_assignada ?h ?r)
             (habitacion_visitada ?h ?r)
-            (increase (xctj_ocupacion) (* (/ (tamano_reserva ?r) (tamano_habitacion ?h)) 100))
+            (increase (xctj_ocupacion) (* (/ (tamano ?r) (tamano ?h)) 100))
             (increase (cantidad_reservas) 1)
         )
     )
@@ -86,8 +85,8 @@
             (not (visitada ?r1))
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h ?r1))
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r1))
-            (< (- (tamano_habitacion ?h) (tamano_reserva ?r1)) (- (tamano_habitacion ?h) (tamano_reserva ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
+            (>= (tamano ?h) (tamano ?r1))
+            (< (- (tamano ?h) (tamano ?r1)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
                 (and   
                     (>= (end_day ?r) (start_day ?r1))
@@ -113,8 +112,8 @@
             (reservada ?r1)
             (not (habitacion_assignada ?h ?r))
             (habitacion_assignada ?h ?r1)
-            (decrease (xctj_ocupacion) (* (/ (tamano_reserva ?r) (tamano_habitacion ?h)) 100))
-            (increase (xctj_ocupacion) (* (/ (tamano_reserva ?r1) (tamano_habitacion ?h)) 100)) 
+            (decrease (xctj_ocupacion) (* (/ (tamano ?r) (tamano ?h)) 100))
+            (increase (xctj_ocupacion) (* (/ (tamano ?r1) (tamano ?h)) 100)) 
             
         )
     )
@@ -124,8 +123,8 @@
         :precondition (and
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
-            (>= (tamano_habitacion ?h1) (tamano_reserva ?r))
-            (< (- (tamano_habitacion ?h1) (tamano_reserva ?r)) (- (tamano_habitacion ?h) (tamano_reserva ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
+            (>= (tamano ?h1) (tamano ?r))
+            (< (- (tamano ?h1) (tamano ?r)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h1 ?r1))
@@ -162,8 +161,8 @@
             )
             (habitacion_assignada ?h1 ?r)
             (habitacion_visitada ?h1 ?r)
-            (decrease (xctj_ocupacion) (* (/ (tamano_reserva ?r) (tamano_habitacion ?h)) 100))
-            (increase (xctj_ocupacion) (* (/ (tamano_reserva ?r) (tamano_habitacion ?h1)) 100))
+            (decrease (xctj_ocupacion) (* (/ (tamano ?r) (tamano ?h)) 100))
+            (increase (xctj_ocupacion) (* (/ (tamano ?r) (tamano ?h1)) 100))
             ;cantidad_reservas no cambia
         )
     )

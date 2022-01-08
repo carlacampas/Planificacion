@@ -3,8 +3,7 @@
     (:types habitacion - object
             reserva - object)
     (:functions
-        (tamano_habitacion ?h - habitacion)     ; capacidad maxima de una habitacion 1-4
-        (tamano_reserva ?r - reserva)           ; cantidad de personas dde la reserva
+        (tamano ?x - object)     ; capacidad maxima de una habitacion 1-4
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
         (dias_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
@@ -22,7 +21,7 @@
         :precondition (and 
             (not (reservada ?r))
             (not (habitacion_visitada ?h ?r))
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
+            (>= (tamano ?h) (tamano ?r))
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h ?r1))
@@ -47,8 +46,8 @@
             (reservada ?r1)
             (habitacion_assignada ?h ?r1)
             ;(not (= ?reserva ?reserva1)) -- absurd perk no pot ser reservat + no visitat
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r))
-            (>= (tamano_habitacion ?h) (tamano_reserva ?r1))
+            (>= (tamano ?h) (tamano ?r))
+            (>= (tamano ?h) (tamano ?r1))
             (or
                 (and
                     (>= (end_day ?r1) (start_day ?r))

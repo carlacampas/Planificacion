@@ -78,17 +78,17 @@ def writeInit(extension, nRooms, nReservations):
         endDay = randrange(startDayList[i]+1, DAYS + 1)   # endDay must be larger than startDay
         f.write("\t\t(= (end_day r" + str(i) + ") " + str(endDay) + ")\n")
 
-    # Write tamano_habitacion
+    # Write tamano habitacion
     for i in range(0, nRooms):
         tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
         sumCamas += tamanoHabitacion
-        f.write("\t\t(= (tamano_habitacion h" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
+        f.write("\t\t(= (tamano h" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
 
 
-    # Write tamano_reserva
+    # Write tamano reserva
     for i in range(0, nReservations):
         tamanoHabitacion = randrange(MIN_ROOM_CAPACITY, MAX_ROOM_CAPACITY + 1)
-        f.write("\t\t(= (tamano_reserva r" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
+        f.write("\t\t(= (tamano r" + str(i) + ") " + str(tamanoHabitacion) + ")\n")
 
     if extension == 2:
         # Write pref_orient_no_servida
