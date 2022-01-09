@@ -1,4 +1,4 @@
-(define (problem extension3) (:domain hotel)
+(define (problem jp1) (:domain hotel)
     (:objects
     	;h1 h2 h3 h4 h5 h6 h7 h8 - habitacion
     	;r1  r2  r3  r4  r5  r6  r7  r8 - reserva
