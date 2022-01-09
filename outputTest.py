@@ -12,6 +12,15 @@ def main():
     for x in lh:
         dict[x] = set()
     
+    
+
+    print('Initial state:')
+    for key in dict.keys():
+        print(key)
+        print(dict[key])
+    print ('-----------------------------')
+
+
     act = ""
     actions = []
     
@@ -77,9 +86,9 @@ def main():
 
     
     for key in dict.keys():
-        print(key, end = ':') 
+        print(key, end = ': ') 
         for x in dict[key]:
-            print(x, end = ', ')
+            print(x, end = ' ')
         print()
 
 if __name__ == '__main__':
