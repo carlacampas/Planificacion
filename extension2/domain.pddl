@@ -47,27 +47,9 @@
     (:action eliminar
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)    ; para dos reservas
         :precondition (and 
-            (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
+            (not (habitacion_visitada ?h ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
             (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano ?h) (tamano ?r))
-            (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
-                (and   
-                    (>= (end_day ?r1) (start_day ?r))
-                    (<= (end_day ?r1) (end_day ?r))
-                )
-                (and
-                    (>= (start_day ?r1) (start_day ?r))
-                    (<= (start_day ?r1) (end_day ?r))
-                )
-                (and
-                    (<= (start_day ?r1) (start_day ?r))
-                    (>= (end_day ?r1) (end_day ?r))
-                )
-                (and
-                    (>= (start_day ?r1) (start_day ?r))
-                    (<= (end_day ?r1) (end_day ?r))
-                )
-            )
         )
         :effect (and 
             (not (reservada ?r1))
@@ -92,9 +74,6 @@
                     (> (start_day ?r1) (end_day ?r))
                 )
             )
-            (not (= (orientacion ?r) -1)) 
-            (not (= (orientacion ?r) (orientacion ?h)))
-            (= (orientacion ?r) (orientacion ?h1))
         )
         :effect (and
             (not (habitacion_assignada ?h ?r))

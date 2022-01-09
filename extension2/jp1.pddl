@@ -30,7 +30,6 @@
         (= (orientacion h0) 0)
         (= (orientacion h1) 2)
 
-        ; n = 0 / s = 1 / e = 2 / o = 3
         (= (orientacion r1) 0)
         (= (orientacion r2) 0)
         (= (orientacion r3) 0)
