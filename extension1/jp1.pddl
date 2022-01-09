@@ -1,4 +1,4 @@
-(define (problem nivel_basico) (:domain hotel)
+(define (problem jp1) (:domain hotel)
     (:objects
     	h0 h1 - habitacion
     	r1 r2 r3 r4 r5 r6 r7 r8 r9 - reserva
@@ -26,7 +26,7 @@
         (= (start_day r82) 8)
         (= (start_day r92) 9)
 
-        (= (end_day r1) 2)
+        (= (end_day r1) 1)
         (= (end_day r2) 2)
         (= (end_day r3) 3)
         (= (end_day r4) 4)
