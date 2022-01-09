@@ -60,7 +60,7 @@
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h ?r1))
             (>= (tamano ?h) (tamano ?r1))
-            (< (- (tamano ?h) (tamano ?r1)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
+            ;(< (- (tamano ?h) (tamano ?r1)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (or ; si hay algun conflicto entre la habitacion r1 (reservada) y r (no reservada) quitamos r1
                 (and   
                     (>= (end_day ?r) (start_day ?r1))
@@ -98,7 +98,7 @@
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h1 ?r))
             (>= (tamano ?h1) (tamano ?r))
-            (< (- (tamano ?h1) (tamano ?r)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
+            ;(< (- (tamano ?h1) (tamano ?r)) (- (tamano ?h) (tamano ?r))) ; ?r será candidata a dar conflicto si deja menos camas en ?h desocupadas que la ?r1 ya asignada
             (forall (?r1 - reserva)
                 (or
                     (not (habitacion_assignada ?h1 ?r1))
