@@ -3,28 +3,15 @@ import sys
 dict = {}
 
 def main():
-    h = int(input('número de habitaciones: '))
-    n = int(input('número de reservas: '))
-    i = 0
-    while i < n:
-        r = input('nombre reserva: ')
-        l = list()
-        j = 0
+    h = input('introduce lista habitaciones: ')
+    lh = h.split(' ') 
 
-        while j < h:
-            l.append(False)
-            j += 1
-        dict[r] = l
-        i += 1
+    #r = input('introduce lista reservas: ')
+    #lr = r.split(' ')
+        
+    for x in lh:
+        dict[x] = set()
     
-    
-
-    print('Initial state:')
-    for key in dict.keys():
-        print(key)
-        print(dict[key])
-
-
     act = ""
     actions = []
     
@@ -40,34 +27,41 @@ def main():
         if 'DESCARTAR' not in str and 'REACH-GOAL' not in str:
             st = str.find(' H')
         
-            st += 2
+            st += 1
             aux = str[st:]
             end = st+aux.find(' ')
 
-            hab = int(str[st:end])
+            hab = str[st:end]
 
             if 'RESERVAR' in str:
+                #print('reservar ') 
                 res = str[end+1:]
-                dict[res.lower()][hab] = True
+                #print(res), print(hab)
+                dict[hab.lower()].add(res.lower())
             elif 'ELIMINAR' in str:
+                #print('eliminar')
                 st = end+1
                 aux = str[st:]
                 end = st+aux.find(' ')
                 
                 res2 = str[end+1:]
-                dict[res2.lower()][hab] = False 
+                dict[hab.lower()].remove(res2.lower())
+                #print(res), print(hab2) 
             elif 'CAMBIO_H' in str:
+                #print('cambio_h')
                 st = end+1
                 aux = str[st:]
                 end = st+aux.find(' ')
                 
-                hab2 = int(str[st+1:end])
+                hab2 = str[st:end]
                 res = str[end+1:]
 
-                dict[res.lower()][hab] = False
-                dict[res.lower()][hab2a] = True
+                dict[hab.lower()].remove(res.lower())
+                dict[hab2.lower()].add(res.lower())
+                #print(res), print(hab), print(hab2) 
 
             elif 'CAMBIO_R' in str:
+                #print('cambio_r')
                 st = end+1
                 aux = str[st:]
                 end = st+aux.find(' ')
@@ -75,16 +69,18 @@ def main():
                 res1 = str[st:end]
                 res2 = str[end+1:]
 
-                dict[res1.lower()][hab] = False
-                dict[res2.lower()][hab] = True
-
+                dict[hab.lower()].remove(res1.lower())
+                dict[hab.lower()].add(res2.lower())
+                #print(res), print(res2), print(hab) 
         i += 1
     
 
     
     for key in dict.keys():
-        print(key)
-        print(dict[key])
+        print(key, end = ':') 
+        for x in dict[key]:
+            print(x, end = ', ')
+        print()
 
 if __name__ == '__main__':
     main()
