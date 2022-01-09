@@ -14,7 +14,7 @@
         (= (start_day r22) 2)
         (= (start_day r32) 3)
 
-        (= (end_day r1) 1)
+        (= (end_day r1) 3)
         (= (end_day r2) 2)
         (= (end_day r3) 3)
         (= (end_day r12) 1)

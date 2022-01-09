@@ -99,12 +99,12 @@ def writeInit(extension, nRooms, nReservations):
         # Write orientacion_habitacion
         for i in range(0, nRooms):
             orientacion = randrange(MIN_ORIENTATION, MAX_ORIENTATION + 1)
-            f.write("\t\t(= (orientacion_habitacion h" + str(i) + ") " + str(orientacion) + ")\n")
+            f.write("\t\t(= (orientacion h" + str(i) + ") " + str(orientacion) + ")\n")
 
         # Write pref_orientacion
         for i in range(0, nReservations):
             orientacion = randrange(MIN_PREF_ORIENTATION, MAX_ORIENTATION + 1)
-            f.write("\t\t(= (pref_orientacion r" + str(i) + ") " + str(orientacion) + ")\n")
+            f.write("\t\t(= (orientacion r" + str(i) + ") " + str(orientacion) + ")\n")
 
     f.write("\t)\n")
 

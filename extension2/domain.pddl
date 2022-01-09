@@ -7,8 +7,7 @@
         (start_day ?r - reserva)               ; dia que desean empezar - FIJO
         (end_day ?r - reserva)                 ; dia que desean acabar - FIJO
         (reservas_libres)                         ; dias que el hotel no tiene reservado -> inicializado a (num hab * num dias)
-        (orientacion_habitacion ?h - habitacion)   ; orientacion: n = 0 / s = 1 / e = 2 / o = 3
-        (pref_orientacion ?r - reserva)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
+        (orientacion ?x - object)         ; preferencia orientacion: no existe = -1 / n = 0 / s = 1 / e = 2 / o = 3
         (pref_orient_no_servida)              ; cantidad de preferencias no servidas -> inicializado a num reservas
     )
 
@@ -39,7 +38,7 @@
             (habitacion_assignada ?h ?r)
             (habitacion_visitada ?h ?r)
             (decrease (reservas_libres) 1)
-            (when (or (= (pref_orientacion ?r) -1) (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
+            (when (or (= (orientacion ?r) -1) (= (orientacion ?r) (orientacion ?h)))
                 (decrease (pref_orient_no_servida) 1)
             )
         )
@@ -74,7 +73,7 @@
             (not (reservada ?r1))
             (not (habitacion_assignada ?h ?r1))
             (increase (reservas_libres) 1)
-            (when (or (= (pref_orientacion ?r1) -1) (= (pref_orientacion ?r1) (orientacion_habitacion ?h)))
+            (when (or (= (orientacion ?r1) -1) (= (orientacion ?r1) (orientacion ?h)))
                 (increase (pref_orient_no_servida) 1) ;incrementamos si perdemos preferencia 
             )
         )
@@ -93,9 +92,9 @@
                     (> (start_day ?r1) (end_day ?r))
                 )
             )
-            (not (= (pref_orientacion ?r) -1)) 
-            (not (= (pref_orientacion ?r) (orientacion_habitacion ?h)))
-            (= (pref_orientacion ?r) (orientacion_habitacion ?h1))
+            (not (= (orientacion ?r) -1)) 
+            (not (= (orientacion ?r) (orientacion ?h)))
+            (= (orientacion ?r) (orientacion ?h1))
         )
         :effect (and
             (not (habitacion_assignada ?h ?r))

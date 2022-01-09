@@ -27,15 +27,15 @@
         (= (tamano r4) 1)
         (= (tamano r5) 1)
 
-        (= (orientacion_habitacion h0) 0)
-        (= (orientacion_habitacion h1) 2)
+        (= (orientacion h0) 0)
+        (= (orientacion h1) 2)
 
         ; n = 0 / s = 1 / e = 2 / o = 3
-        (= (pref_orientacion r1) 0)
-        (= (pref_orientacion r2) 0)
-        (= (pref_orientacion r3) 0)
-        (= (pref_orientacion r4) 0)
-        (= (pref_orientacion r5) 0)
+        (= (orientacion r1) 0)
+        (= (orientacion r2) 0)
+        (= (orientacion r3) 0)
+        (= (orientacion r4) 0)
+        (= (orientacion r5) 0)
     )
 
     (:goal (or (forall (?res - reserva) (visitada ?res))))

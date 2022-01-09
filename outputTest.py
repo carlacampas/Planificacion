@@ -17,6 +17,8 @@ def main():
         dict[r] = l
         i += 1
     
+    
+
     print('Initial state:')
     for key in dict.keys():
         print(key)
@@ -46,14 +48,14 @@ def main():
 
             if 'RESERVAR' in str:
                 res = str[end+1:]
-                dict[res.lower()][hab-1] = True
+                dict[res.lower()][hab] = True
             elif 'ELIMINAR' in str:
                 st = end+1
                 aux = str[st:]
                 end = st+aux.find(' ')
                 
                 res2 = str[end+1:]
-                dict[res2.lower()][hab-1] = False 
+                dict[res2.lower()][hab] = False 
             elif 'CAMBIO_H' in str:
                 st = end+1
                 aux = str[st:]
@@ -62,8 +64,8 @@ def main():
                 hab2 = int(str[st+1:end])
                 res = str[end+1:]
 
-                dict[res.lower()][hab-1] = False
-                dict[res.lower()][hab2-1] = True
+                dict[res.lower()][hab] = False
+                dict[res.lower()][hab2a] = True
 
             elif 'CAMBIO_R' in str:
                 st = end+1
@@ -73,8 +75,8 @@ def main():
                 res1 = str[st:end]
                 res2 = str[end+1:]
 
-                dict[res1.lower()][hab-1] = False
-                dict[res2.lower()][hab-1] = True
+                dict[res1.lower()][hab] = False
+                dict[res2.lower()][hab] = True
 
         i += 1
     

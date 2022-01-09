@@ -10,7 +10,7 @@
     )
 
     (:predicates
-        (visitada ?r - reserva)                                 ;si una reserva ha entrado en reservar correctamente (se ha reservado en algun momento)
+        (visitada ?r - reserva)
         (reservada ?r - reserva)                             ;si en este momento la reserva se ha podido efectuar correctamente           
         (habitacion_assignada ?h - habitacion ?r - reserva)  ;si la habitacion esta asignada a una reserva
         (habitacion_visitada ?h - habitacion ?r - reserva)      ; si la combinacion de habitacion - reserva ha sido visitada
@@ -42,7 +42,7 @@
     (:action eliminar
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
         :precondition (and 
-            (not (visitada ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
+            (not (habitacion_visitada ?h ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
             (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
             (>= (tamano ?h) (tamano ?r))
             (or
