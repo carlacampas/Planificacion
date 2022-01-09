@@ -118,7 +118,7 @@ def writeMetric(extension, nRooms, nReservations):
     elif extension == 1:
         f.write("\t(:metric minimize (reservas_libres))\n")
     elif extension == 2:
-        f.write("\t(:metric minimize (+ (/ (pref_orient_no_servida) " + str(sumCamas) + ") (* (/ (reservas_libres) " + str(diasLibres) + ") " + str(100) + ")))\n")
+        f.write("\t(:metric minimize (+ (pref_orient_no_servida) (* (reservas_libres) " + str(3) + ")))\n")
     elif extension == 3:
         f.write("\t(:metric maximize (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (cantidad_reservas) " + str(nReservations) + ")))\n")
     elif extension == 4:
