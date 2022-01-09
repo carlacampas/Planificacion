@@ -45,12 +45,8 @@
     )
 
     (:action eliminar
-        :parameters (?h - habitacion ?r - reserva ?r1 - reserva)    ; para dos reservas
-        :precondition (and 
-            (not (habitacion_visitada ?h ?r)) ; si la habitacion r no ha sido visitada --> maybe change to not habitacion_assig
-            (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
-            (>= (tamano ?h) (tamano ?r))
-        )
+        :parameters (?h - habitacion ?r1 - reserva)    ; para dos reservas
+        :precondition (habitacion_assignada ?h ?r1) ; la habitacion ha sido assignada
         :effect (and 
             (not (reservada ?r1))
             (not (habitacion_assignada ?h ?r1))
