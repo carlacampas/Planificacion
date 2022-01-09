@@ -27,17 +27,17 @@
     (:action reservar
         :parameters (?h - habitacion ?r - reserva)          ; reservamos una reserva en una habitacion
         :precondition (and 
-            (not (visitada ?r))
+            ;(not (visitada ?r))
             (not (reservada ?r))                            ; si la habitacion no esta en la lista de reservados
             (not (habitacion_visitada ?h ?r))               ; si la habitacion - reserva no ha sido visitada
             (>= (tamano ?h) (tamano ?r)) ; si el grupo cabe en la habitacion
             
-            (forall (?h1 - habitacion)
-                (or
-                    (< (tamano ?h1) (tamano ?r))
-                    (<= (- (tamano ?h) (tamano ?r)) (- (tamano ?h1) (tamano ?r)))
-                )
-            )
+            ;(forall (?h1 - habitacion)
+            ;    (or
+            ;        (< (tamano ?h1) (tamano ?r))
+            ;        (<= (- (tamano ?h) (tamano ?r)) (- (tamano ?h1) (tamano ?r)))
+            ;    )
+            ;)
 
             (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
@@ -60,7 +60,8 @@
     (:action cambio_reserva
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
         :precondition (and 
-            (not (visitada ?r1))
+            ;(not (visitada ?r1))
+            (not (reservada ?r1))
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h ?r1))
             (>= (tamano ?h) (tamano ?r1))
@@ -86,6 +87,7 @@
         )
         :effect (and
             (visitada ?r1)
+            (habitacion_visitada ?h ?r1)
             (not (reservada ?r))
             (reservada ?r1)
             (not (habitacion_assignada ?h ?r))

@@ -1,4 +1,4 @@
-(define (problem generated) (:domain hotel)
+(define (problem jp3) (:domain hotel)
 	(:objects
 		h0 h1 h2 h3 h4 h5 h6 - habitacion
 		r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 r14 - reserva
