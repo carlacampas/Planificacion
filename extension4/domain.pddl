@@ -1,7 +1,9 @@
 (define (domain hotel)
     (:requirements :strips :equality :adl :typing :fluents :conditional-effects)
-    (:types habitacion - object
-            reserva - object)
+    (:types 
+        habitacion - object
+        reserva - object
+    )
     (:functions
         (tamano ?x - object)
         (start_day ?r - reserva)                ; dia que desean empezar - FIJO
@@ -28,6 +30,13 @@
             (not (habitacion_visitada ?h ?r))               ; si la habitacion - reserva no ha sido visitada
             (>= (tamano ?h) (tamano ?r)) ; si el grupo cabe en la habitacion
             
+            (forall (?h1 - habitacion)
+                (or
+                    (< (tamano ?h1) (tamano ?r))
+                    (<= (- (tamano ?h) (tamano ?r)) (- (tamano ?h1) (tamano ?r)))
+                )
+            )
+
             (forall (?r1 - reserva)                         ; no hay conflictos de dias para todas las habitaciones
                 (or
                     (not (habitacion_assignada ?h ?r1))
@@ -52,11 +61,10 @@
             (increase (cantidad_reservas) 1)
         )
     )
-
     (:action cambio_reserva
         :parameters (?h - habitacion ?r - reserva ?r1 - reserva)
         :precondition (and 
-            ;(not (visitada ?r1))
+            (not (visitada ?r1))
             (habitacion_assignada ?h ?r)
             (not (habitacion_visitada ?h ?r1))
             (>= (tamano ?h) (tamano ?r1))
@@ -91,7 +99,6 @@
             
         )
     )
-    
     (:action cambio_habitacion ; en este caso solo nos itneresa cambiar si hay algun "beneficio", solo cambiamos si hay una habitación más ajustada
         :parameters (?h - habitacion ?h1 - habitacion ?r - reserva)
         :precondition (and
@@ -141,6 +148,3 @@
         )
     )
 )
-
-
- 
