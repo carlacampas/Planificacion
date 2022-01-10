@@ -10,7 +10,7 @@ for extension in constants.EXTENSIONS:
     # TODO: Potser caldria fixar els nRooms i nReservations d'una altra manera...
     for i in range(1, constants.N_PROBLEMS + 1):
         nRooms = i
-        nReservations = 2*i
+        nReservations = 4*i
         fileName = "g" + str(extension) + "/p" + str(nRooms)
         command = "python3 generator.py " + str(extension) + " " + str(nRooms) + " " + str(nReservations) + " " + fileName
         os.system(command)

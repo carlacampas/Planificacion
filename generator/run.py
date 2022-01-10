@@ -25,10 +25,6 @@ for extension in constants.EXTENSIONS:
                 unsolvable = time == "ff:"
             else:
                 unsolvable = False
-            #     resultLine = lines[-12]
-            #     if "problem proven unsolvable" in resultLine:
-            #         unsolvable = True
-            #         print("repeat")
             if unsolvable:   # Problem cannot be solved
                 command = "python3 generator.py " + str(extension) + " " + str(i) + " " + str(4*i) + " " + fileName
                 os.system(command)

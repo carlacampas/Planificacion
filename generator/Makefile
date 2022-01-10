@@ -1,5 +1,5 @@
 # Run generator to generate problems, run Metric-FF and obtain results in csv file (one line per extension)
-default: clean generate run csv
+default: clean generate run csv plot
 
 # Run Metric-FF on generated problems and generate results csv
 run:
@@ -12,6 +12,10 @@ generate:
 # Generate results csv
 csv:
 		python3 generateResultCSV.py
+
+# Plot results
+plot:
+		python3 plot.py
 
 # Clean problem files, cache and results
 clean:
