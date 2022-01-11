@@ -1,0 +1,26 @@
+(define (problem p1) (:domain hotel)
+	(:objects
+		h0 - habitacion
+		r0 r1 r2 r3 - reserva
+	)
+	(:init
+		(= (cantidad_reservas) 0)
+		(= (xctj_ocupacion) 0)
+		(= (habitaciones_unused) 1)
+		(= (start_day r0) 4)
+		(= (start_day r1) 3)
+		(= (start_day r2) 23)
+		(= (start_day r3) 23)
+		(= (end_day r0) 30)
+		(= (end_day r1) 6)
+		(= (end_day r2) 30)
+		(= (end_day r3) 28)
+		(= (tamano h0) 3)
+		(= (tamano r0) 1)
+		(= (tamano r1) 1)
+		(= (tamano r2) 3)
+		(= (tamano r3) 3)
+	)
+	(:goal (or (forall (?res - reserva) (visitada ?res))))
+	(:metric maximize (+ (+ (/ (xctj_ocupacion) (cantidad_reservas)) (/ (habitaciones_unused) 1)) (/ (cantidad_reservas) 4)))
+)
